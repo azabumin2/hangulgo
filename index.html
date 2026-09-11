@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
-  <title>HangulGo - 한글 학습의 시작</title>
+  <title>HangulGo</title>
 
   <!-- Mobile / PWA 설정 -->
   <meta name="theme-color" content="#58cc02">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="한글고">
-  <meta name="description" content="듀오링고 스타일의 한글 학습 웹 앱 - HangulGo">
+  <meta name="apple-mobile-web-app-title" content="HangulGo">
+  <meta name="description" content="Learn Hangul the Duolingo way - HangulGo">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icon.svg">
@@ -50,11 +50,37 @@
       position: sticky; top: 0; z-index: 100;
       padding: max(12px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) 12px max(20px, env(safe-area-inset-left));
       display: flex; justify-content: space-between; align-items: center;
-      gap: 8px;
+      gap: 8px; flex-wrap: wrap; row-gap: 8px;
     }
     .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+    .header-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .stats-bar { display: flex; gap: 16px; font-weight: bold; font-size: 0.95rem; }
     .stat-item { display: flex; align-items: center; gap: 6px; background: #f0f0f0; padding: 6px 12px; border-radius: 20px; white-space: nowrap; }
+
+    /* Language Switcher */
+    .lang-switcher { position: relative; }
+    .lang-btn {
+      background: #f0f0f0; border: none; border-radius: 20px;
+      padding: 6px 12px; font-weight: bold; font-size: 0.9rem; cursor: pointer;
+      display: flex; align-items: center; gap: 6px; color: var(--text);
+      touch-action: manipulation; -webkit-user-select: none; user-select: none;
+    }
+    .lang-menu {
+      display: none; position: absolute; top: calc(100% + 8px); right: 0;
+      background: var(--card-bg); border: 2px solid var(--gray); border-radius: 14px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12); overflow: hidden; z-index: 300;
+      min-width: 150px;
+    }
+    .lang-menu.open { display: block; }
+    .lang-option {
+      display: flex; align-items: center; gap: 10px; width: 100%;
+      background: none; border: none; padding: 12px 16px; font-size: 0.95rem;
+      cursor: pointer; text-align: left; color: var(--text);
+      touch-action: manipulation; -webkit-user-select: none; user-select: none;
+    }
+    .lang-option:hover, .lang-option:active { background: #f0f0f0; }
+    .lang-option.active { color: var(--primary); font-weight: bold; }
+    .lang-flag { font-size: 1.2rem; }
 
     /* Main Container */
     main {
@@ -175,6 +201,7 @@
       .logo { font-size: 1.15rem; }
       .stats-bar { gap: 8px; font-size: 0.8rem; }
       .stat-item { padding: 5px 8px; }
+      .lang-btn { padding: 5px 9px; font-size: 0.8rem; }
       main { padding-left: max(14px, env(safe-area-inset-left)); padding-right: max(14px, env(safe-area-inset-right)); }
       .node-card { width: 78px; height: 78px; font-size: 1.05rem; }
       .quiz-prompt { font-size: 1.15rem; }
@@ -195,12 +222,25 @@
     <div class="logo">
       <span>🔥</span> HangulGo
     </div>
-    <div class="stats-bar">
-      <div class="stat-item" title="연속 학습 일수">
-        <span>🔥</span> <span id="streak-count">1</span>일
+    <div class="header-right">
+      <div class="stats-bar">
+        <div class="stat-item" id="streak-stat" title="Study Streak">
+          <span>🔥</span> <span id="streak-count">1</span><span id="streak-suffix">&nbsp;Days</span>
+        </div>
+        <div class="stat-item" id="xp-stat" title="Experience Points">
+          <span>⚡</span> <span id="xp-count">0</span> XP
+        </div>
       </div>
-      <div class="stat-item" title="경험치">
-        <span>⚡</span> <span id="xp-count">0</span> XP
+      <div class="lang-switcher">
+        <button class="lang-btn" id="lang-btn" onclick="toggleLangMenu()">
+          <span class="lang-flag">🌐</span> <span id="lang-btn-label">EN</span>
+        </button>
+        <div class="lang-menu" id="lang-menu">
+          <button class="lang-option" data-lang="ko" onclick="setLang('ko')"><span class="lang-flag">🇰🇷</span> 한국어</button>
+          <button class="lang-option" data-lang="en" onclick="setLang('en')"><span class="lang-flag">🇺🇸</span> English</button>
+          <button class="lang-option" data-lang="ja" onclick="setLang('ja')"><span class="lang-flag">🇯🇵</span> 日本語</button>
+          <button class="lang-option" data-lang="zh" onclick="setLang('zh')"><span class="lang-flag">🇨🇳</span> 中文</button>
+        </div>
       </div>
     </div>
   </header>
@@ -209,7 +249,7 @@
   <main>
     <!-- View 1: 학습 트리 (Stage Path) -->
     <section id="view-learn" class="view active">
-      <h2 style="margin-bottom: 16px;">한글 학습 커리큘럼</h2>
+      <h2 id="learn-heading" style="margin-bottom: 16px;">Hangul Learning Path</h2>
       <div class="path-container" id="path-tree">
         <!-- 동적 생성됨 -->
       </div>
@@ -217,27 +257,27 @@
 
     <!-- View 2: 한글 문자표 (Hangul Alphabet Chart) -->
     <section id="view-chart" class="view">
-      <h2 style="margin-bottom: 16px;">한글 자음/모음표</h2>
-      
+      <h2 id="chart-heading" style="margin-bottom: 16px;">Hangul Consonant/Vowel Chart</h2>
+
       <div class="chart-section">
-        <h3>기본 자음 (Consonants)</h3>
+        <h3 id="consonants-heading">Consonants</h3>
         <div class="grid-chart" id="chart-consonants"></div>
       </div>
 
       <div class="chart-section">
-        <h3>기본 모음 (Vowels)</h3>
+        <h3 id="vowels-heading">Vowels</h3>
         <div class="grid-chart" id="chart-vowels"></div>
       </div>
 
       <div class="chart-section">
-        <h3>기초 단어 예시</h3>
+        <h3 id="words-heading">Example Words</h3>
         <div class="grid-chart" id="chart-words"></div>
       </div>
     </section>
 
     <!-- View 3: 일일 퀘스트 (Daily Quests) -->
     <section id="view-quests" class="view">
-      <h2 style="margin-bottom: 16px;">오늘의 미션</h2>
+      <h2 id="quests-heading" style="margin-bottom: 16px;">Today's Missions</h2>
       <div id="quest-list">
         <!-- 동적 생성됨 -->
       </div>
@@ -246,10 +286,10 @@
     <!-- View 4: 일일 테스트 (Daily Quiz) -->
     <section id="view-daily" class="view">
       <div style="background: white; border: 2px solid var(--gray); border-radius: 20px; padding: 24px; text-align: center;">
-        <span style="font-size: 3rem;">🎯</span>
-        <h2 style="margin: 12px 0 8px 0;">일일 한글 테스트</h2>
-        <p style="color: var(--gray-text); margin-bottom: 20px;">무작위 조합 문제로 오늘 실력을 측정하고 보너스 100 XP를 획득하세요!</p>
-        <button class="btn btn-accent" onclick="startDailyTest()">오늘의 테스트 시작</button>
+        <span style="font-size: 3rem;" id="daily-icon">🎯</span>
+        <h2 id="daily-heading" style="margin: 12px 0 8px 0;">Daily Hangul Test</h2>
+        <p id="daily-desc" style="color: var(--gray-text); margin-bottom: 20px;">Test your skills today with randomly mixed questions and earn a bonus of 100 XP!</p>
+        <button class="btn btn-accent" id="daily-btn" onclick="startDailyTest()">Start Today's Test</button>
       </div>
     </section>
   </main>
@@ -258,19 +298,19 @@
   <nav class="bottom-nav">
     <button class="nav-btn active" onclick="switchView('learn')">
       <svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM3.82 9L12 4.54 20.18 9 12 13.46 3.82 9z"/></svg>
-      학습
+      <span id="nav-learn-label">Learn</span>
     </button>
     <button class="nav-btn" onclick="switchView('chart')">
       <svg viewBox="0 0 24 24"><path d="M4 5h16v2H4zm0 6h16v2H4zm0 6h16v2H4z"/></svg>
-      문자표
+      <span id="nav-chart-label">Chart</span>
     </button>
     <button class="nav-btn" onclick="switchView('quests')">
       <svg viewBox="0 0 24 24"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94A5.01 5.01 0 0011 15.9V19H7v2h10v-2h-4v-3.1c2.22-.49 3.93-2.22 4.39-4.64C19.8 10.63 21 8.55 21 6V5c0-1.1-.9-2-2-2z"/></svg>
-      퀘스트
+      <span id="nav-quests-label">Quests</span>
     </button>
     <button class="nav-btn" onclick="switchView('daily')">
       <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
-      일일테스트
+      <span id="nav-daily-label">Daily Test</span>
     </button>
   </nav>
 
@@ -282,37 +322,20 @@
         <div id="quiz-progress-fill" class="quiz-progress-fill"></div>
       </div>
     </div>
-    
+
     <div class="quiz-body">
-      <div class="quiz-prompt" id="quiz-question">문제 불러오는 중...</div>
-      <button class="btn btn-secondary" id="audio-btn" style="width: auto; padding: 8px 16px;" onclick="playCurrentAudio()">🔊 발음 듣기</button>
+      <div class="quiz-prompt" id="quiz-question">Loading question...</div>
+      <button class="btn btn-secondary" id="audio-btn" style="width: auto; padding: 8px 16px;" onclick="playCurrentAudio()">🔊 Listen</button>
       <div class="quiz-options" id="quiz-options"></div>
     </div>
 
     <div>
-      <button class="btn" id="quiz-submit-btn" onclick="submitAnswer()">확인</button>
+      <button class="btn" id="quiz-submit-btn" onclick="submitAnswer()">Confirm</button>
     </div>
   </div>
 
   <script>
-    /* App State */
-    const state = {
-      xp: parseInt(localStorage.getItem('hg_xp')) || 0,
-      streak: parseInt(localStorage.getItem('hg_streak')) || 1,
-      completedLevels: JSON.parse(localStorage.getItem('hg_levels')) || [1],
-      dailyProgress: parseInt(localStorage.getItem('hg_daily')) || 0
-    };
-
-    /* Data: Curriculum Levels */
-    const levelsData = [
-      { id: 1, title: "기초 자음", desc: "ㄱ, ㄴ, ㄷ, ㄹ" },
-      { id: 2, title: "기초 모음", desc: "ㅏ, ㅓ, ㅗ, ㅜ" },
-      { id: 3, title: "글자 조합", desc: "가, 나, 다, 라" },
-      { id: 4, title: "기초 단어", desc: "고양이, 나무, 하늘" },
-      { id: 5, title: "일상 회화", desc: "안녕하세요, 감사" }
-    ];
-
-    /* Data: Hangul Alphabet Chart */
+    /* ===================== i18n: 번역 데이터 ===================== */
     const consonants = [
       { char: 'ㄱ', name: 'g/k' }, { char: 'ㄴ', name: 'n' }, { char: 'ㄷ', name: 'd/t' },
       { char: 'ㄹ', name: 'r/l' }, { char: 'ㅁ', name: 'm' }, { char: 'ㅂ', name: 'b/p' },
@@ -327,19 +350,177 @@
       { char: 'ㅜ', name: 'u' }, { char: 'ㅠ', name: 'yu' }, { char: 'ㅡ', name: 'eu' }, { char: 'ㅣ', name: 'i' }
     ];
 
-    const words = [
-      { char: '나비', name: 'Butterfly' }, { char: '나무', name: 'Tree' },
-      { char: '바다', name: 'Sea' }, { char: '하늘', name: 'Sky' }
-    ];
+    const translations = {
+      ko: {
+        langBtnLabel: '한국어',
+        tagline: '한글 학습의 시작',
+        nav: { learn: '학습', chart: '문자표', quests: '퀘스트', daily: '일일테스트' },
+        streakSuffix: '일', streakTitle: '연속 학습 일수', xpTitle: '경험치',
+        learnHeading: '한글 학습 커리큘럼',
+        levels: [
+          { title: '기초 자음', desc: 'ㄱ, ㄴ, ㄷ, ㄹ' },
+          { title: '기초 모음', desc: 'ㅏ, ㅓ, ㅗ, ㅜ' },
+          { title: '글자 조합', desc: '가, 나, 다, 라' },
+          { title: '기초 단어', desc: '고양이, 나무, 하늘' },
+          { title: '일상 회화', desc: '안녕하세요, 감사' }
+        ],
+        chartHeading: '한글 자음/모음표',
+        consonantsLabel: '기본 자음 (Consonants)', vowelsLabel: '기본 모음 (Vowels)', wordsLabel: '기초 단어 예시',
+        words: [
+          { char: '나비', name: 'nabi' }, { char: '나무', name: 'namu' },
+          { char: '바다', name: 'bada' }, { char: '하늘', name: 'haneul' }
+        ],
+        questHeading: '오늘의 미션',
+        quest1: '오늘 레벨 3개 완료하기', quest2: '일일 테스트 참가하기', done: '완료', notDone: '미완료',
+        dailyIcon: '🎯', dailyHeading: '일일 한글 테스트',
+        dailyDesc: '무작위 조합 문제로 오늘 실력을 측정하고 보너스 100 XP를 획득하세요!',
+        dailyBtn: '오늘의 테스트 시작',
+        listenBtn: '🔊 발음 듣기', confirmBtn: '확인',
+        selectFirst: '답안을 선택해 주세요!',
+        correct: '정답입니다! 🎉',
+        wrong: (ans) => `아쉽네요! 정답은 '${ans}' 입니다.`,
+        complete: (xp) => `🎊 축하합니다! 학습을 완료하여 +${xp} XP를 획득했습니다!`,
+        questions: [
+          { q: "소리 'g/k'에 해당하는 자음은?", options: ["ㄱ", "ㄴ", "ㄷ", "ㄹ"], a: 0, audio: "ㄱ" },
+          { q: "소리 'a'에 해당하는 모음은?", options: ["ㅓ", "ㅏ", "ㅗ", "ㅜ"], a: 1, audio: "ㅏ" },
+          { q: "다음 중 '나무'의 첫 글자는?", options: ["나", "가", "다", "라"], a: 0, audio: "나" },
+          { q: "'안녕하세요'의 올바른 뜻은?", options: ["감사합니다", "안녕하세요", "안녕히 가세요", "네"], a: 1, audio: "안녕하세요" },
+          { q: "'바다'를 읽는 올바른 발음은?", options: ["Bada", "Nabi", "Haneul", "Gabu"], a: 0, audio: "바다" }
+        ]
+      },
+      en: {
+        langBtnLabel: 'EN',
+        tagline: 'Start Learning Hangul',
+        nav: { learn: 'Learn', chart: 'Chart', quests: 'Quests', daily: 'Daily Test' },
+        streakSuffix: ' Days', streakTitle: 'Study Streak', xpTitle: 'Experience Points',
+        learnHeading: 'Hangul Learning Path',
+        levels: [
+          { title: 'Basic Consonants', desc: 'ㄱ, ㄴ, ㄷ, ㄹ' },
+          { title: 'Basic Vowels', desc: 'ㅏ, ㅓ, ㅗ, ㅜ' },
+          { title: 'Letter Combinations', desc: '가, 나, 다, 라' },
+          { title: 'Basic Words', desc: '고양이, 나무, 하늘' },
+          { title: 'Everyday Conversation', desc: '안녕하세요, 감사' }
+        ],
+        chartHeading: 'Hangul Consonant / Vowel Chart',
+        consonantsLabel: 'Consonants', vowelsLabel: 'Vowels', wordsLabel: 'Example Words',
+        words: [
+          { char: '나비', name: 'Butterfly' }, { char: '나무', name: 'Tree' },
+          { char: '바다', name: 'Sea' }, { char: '하늘', name: 'Sky' }
+        ],
+        questHeading: "Today's Missions",
+        quest1: 'Complete 3 levels today', quest2: 'Take the daily test', done: 'Done', notDone: 'Not done',
+        dailyIcon: '🎯', dailyHeading: 'Daily Hangul Test',
+        dailyDesc: 'Test your skills today with randomly mixed questions and earn a bonus of 100 XP!',
+        dailyBtn: "Start Today's Test",
+        listenBtn: '🔊 Listen', confirmBtn: 'Confirm',
+        selectFirst: 'Please select an answer!',
+        correct: 'Correct! 🎉',
+        wrong: (ans) => `Not quite! The correct answer is '${ans}'.`,
+        complete: (xp) => `🎊 Congratulations! You earned +${xp} XP!`,
+        questions: [
+          { q: "Which consonant makes the 'g/k' sound?", options: ["ㄱ", "ㄴ", "ㄷ", "ㄹ"], a: 0, audio: "ㄱ" },
+          { q: "Which vowel makes the 'a' sound?", options: ["ㅓ", "ㅏ", "ㅗ", "ㅜ"], a: 1, audio: "ㅏ" },
+          { q: "Which is the first letter of '나무' (Tree)?", options: ["나", "가", "다", "라"], a: 0, audio: "나" },
+          { q: "What does '안녕하세요' mean?", options: ["Thank you", "Hello", "Goodbye", "Yes"], a: 1, audio: "안녕하세요" },
+          { q: "How do you pronounce '바다' (Sea)?", options: ["Bada", "Nabi", "Haneul", "Gabu"], a: 0, audio: "바다" }
+        ]
+      },
+      ja: {
+        langBtnLabel: '日本語',
+        tagline: 'ハングル学習をはじめよう',
+        nav: { learn: '学習', chart: '文字表', quests: 'クエスト', daily: 'デイリーテスト' },
+        streakSuffix: '日', streakTitle: '連続学習日数', xpTitle: '経験値',
+        learnHeading: 'ハングル学習コース',
+        levels: [
+          { title: '基本子音', desc: 'ㄱ, ㄴ, ㄷ, ㄹ' },
+          { title: '基本母音', desc: 'ㅏ, ㅓ, ㅗ, ㅜ' },
+          { title: '文字の組み合わせ', desc: '가, 나, 다, 라' },
+          { title: '基礎単語', desc: '고양이, 나무, 하늘' },
+          { title: '日常会話', desc: '안녕하세요, 감사' }
+        ],
+        chartHeading: 'ハングル子音・母音表',
+        consonantsLabel: '子音', vowelsLabel: '母音', wordsLabel: '基礎単語の例',
+        words: [
+          { char: '나비', name: '蝶' }, { char: '나무', name: '木' },
+          { char: '바다', name: '海' }, { char: '하늘', name: '空' }
+        ],
+        questHeading: '今日のミッション',
+        quest1: '今日レベルを3つクリアする', quest2: 'デイリーテストに参加する', done: '完了', notDone: '未完了',
+        dailyIcon: '🎯', dailyHeading: 'デイリーハングルテスト',
+        dailyDesc: 'ランダムな問題で今日の実力をチェックし、ボーナス100XPを獲得しましょう！',
+        dailyBtn: '今日のテストを始める',
+        listenBtn: '🔊 発音を聞く', confirmBtn: '確認',
+        selectFirst: '答えを選択してください！',
+        correct: '正解です！🎉',
+        wrong: (ans) => `残念！正解は '${ans}' です。`,
+        complete: (xp) => `🎊 おめでとうございます！+${xp} XPを獲得しました！`,
+        questions: [
+          { q: "「g/k」の音に当たる子音は？", options: ["ㄱ", "ㄴ", "ㄷ", "ㄹ"], a: 0, audio: "ㄱ" },
+          { q: "「a」の音に当たる母音は？", options: ["ㅓ", "ㅏ", "ㅗ", "ㅜ"], a: 1, audio: "ㅏ" },
+          { q: "「나무」（木）の最初の文字はどれ？", options: ["나", "가", "다", "라"], a: 0, audio: "나" },
+          { q: "「안녕하세요」の正しい意味は？", options: ["ありがとう", "こんにちは", "さようなら", "はい"], a: 1, audio: "안녕하세요" },
+          { q: "「바다」（海）の正しい発音は？", options: ["Bada", "Nabi", "Haneul", "Gabu"], a: 0, audio: "바다" }
+        ]
+      },
+      zh: {
+        langBtnLabel: '中文',
+        tagline: '开始学习韩文',
+        nav: { learn: '学习', chart: '字母表', quests: '任务', daily: '每日测试' },
+        streakSuffix: '天', streakTitle: '连续学习天数', xpTitle: '经验值',
+        learnHeading: '韩文学习课程',
+        levels: [
+          { title: '基础辅音', desc: 'ㄱ, ㄴ, ㄷ, ㄹ' },
+          { title: '基础元音', desc: 'ㅏ, ㅓ, ㅗ, ㅜ' },
+          { title: '字母组合', desc: '가, 나, 다, 라' },
+          { title: '基础单词', desc: '고양이, 나무, 하늘' },
+          { title: '日常会话', desc: '안녕하세요, 감사' }
+        ],
+        chartHeading: '韩文辅音/元音表',
+        consonantsLabel: '辅音', vowelsLabel: '元音', wordsLabel: '基础单词示例',
+        words: [
+          { char: '나비', name: '蝴蝶' }, { char: '나무', name: '树' },
+          { char: '바다', name: '海' }, { char: '하늘', name: '天空' }
+        ],
+        questHeading: '今日任务',
+        quest1: '今天完成3个关卡', quest2: '参加每日测试', done: '已完成', notDone: '未完成',
+        dailyIcon: '🎯', dailyHeading: '每日韩文测试',
+        dailyDesc: '通过随机组合题目检验今天的实力，获得100 XP奖励！',
+        dailyBtn: '开始今日测试',
+        listenBtn: '🔊 听发音', confirmBtn: '确认',
+        selectFirst: '请选择答案！',
+        correct: '回答正确！🎉',
+        wrong: (ans) => `很遗憾！正确答案是 '${ans}'。`,
+        complete: (xp) => `🎊 恭喜！获得了 +${xp} XP！`,
+        questions: [
+          { q: "哪个辅音对应 'g/k' 的发音？", options: ["ㄱ", "ㄴ", "ㄷ", "ㄹ"], a: 0, audio: "ㄱ" },
+          { q: "哪个元音对应 'a' 的发音？", options: ["ㅓ", "ㅏ", "ㅗ", "ㅜ"], a: 1, audio: "ㅏ" },
+          { q: "'나무'（树）的第一个字母是？", options: ["나", "가", "다", "라"], a: 0, audio: "나" },
+          { q: "'안녕하세요' 的正确意思是？", options: ["谢谢", "你好", "再见", "是"], a: 1, audio: "안녕하세요" },
+          { q: "'바다'（海）的正确发音是？", options: ["Bada", "Nabi", "Haneul", "Gabu"], a: 0, audio: "바다" }
+        ]
+      }
+    };
 
-    /* Data: Questions Pool */
-    const questionBank = [
-      { q: "소리 'g/k'에 해당하는 자음은?", options: ["ㄱ", "ㄴ", "ㄷ", "ㄹ"], a: 0, audio: "ㄱ" },
-      { q: "소리 'a'에 해당하는 모음은?", options: ["ㅓ", "ㅏ", "ㅗ", "ㅜ"], a: 1, audio: "ㅏ" },
-      { q: "다음 중 '나무(Tree)'의 첫 글자는?", options: ["나", "가", "다", "라"], a: 0, audio: "나" },
-      { q: "‘안녕하세요’의 올바른 뜻은?", options: ["Thank you", "Hello", "Goodbye", "Yes"], a: 1, audio: "안녕하세요" },
-      { q: "'바다(Sea)'를 읽는 올바른 발음은?", options: ["Bada", "Nabi", "Haneul", "Gabu"], a: 0, audio: "바다" }
-    ];
+    function detectDefaultLang() {
+      const saved = localStorage.getItem('hg_lang');
+      if (saved && translations[saved]) return saved;
+      const nav = (navigator.language || 'en').toLowerCase();
+      if (nav.startsWith('ko')) return 'ko';
+      if (nav.startsWith('ja')) return 'ja';
+      if (nav.startsWith('zh')) return 'zh';
+      return 'en';
+    }
+
+    /* App State */
+    const state = {
+      xp: parseInt(localStorage.getItem('hg_xp')) || 0,
+      streak: parseInt(localStorage.getItem('hg_streak')) || 1,
+      completedLevels: JSON.parse(localStorage.getItem('hg_levels')) || [1],
+      dailyProgress: parseInt(localStorage.getItem('hg_daily')) || 0,
+      lang: detectDefaultLang()
+    };
+
+    function T() { return translations[state.lang]; }
 
     /* Active Quiz State */
     let currentQuizList = [];
@@ -350,9 +531,16 @@
     /* Initialize App */
     function init() {
       updateUIHeader();
+      renderStaticText();
       renderPathTree();
       renderChart();
       renderQuests();
+      document.addEventListener('click', (e) => {
+        const switcher = document.querySelector('.lang-switcher');
+        if (switcher && !switcher.contains(e.target)) {
+          document.getElementById('lang-menu').classList.remove('open');
+        }
+      });
     }
 
     /* UI Header Updates */
@@ -365,23 +553,80 @@
       localStorage.setItem('hg_daily', state.dailyProgress);
     }
 
+    /* ===================== Language Switching ===================== */
+    function toggleLangMenu() {
+      document.getElementById('lang-menu').classList.toggle('open');
+    }
+
+    function setLang(lang) {
+      if (!translations[lang]) return;
+      state.lang = lang;
+      localStorage.setItem('hg_lang', lang);
+      document.getElementById('lang-menu').classList.remove('open');
+      renderStaticText();
+      renderPathTree();
+      renderChart();
+      renderQuests();
+      // 퀴즈가 열려 있으면 현재 문제도 다시 그리기 (문제 은행이 언어별로 달라짐)
+      if (document.getElementById('quiz-overlay').style.display === 'flex') {
+        closeQuiz();
+      }
+    }
+
+    function renderStaticText() {
+      const t = T();
+      document.documentElement.lang = state.lang;
+      document.title = `HangulGo - ${t.tagline}`;
+
+      document.getElementById('lang-btn-label').innerText = t.langBtnLabel;
+      document.querySelectorAll('.lang-option').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === state.lang);
+      });
+
+      document.getElementById('streak-suffix').innerText = t.streakSuffix;
+      document.getElementById('streak-stat').title = t.streakTitle;
+      document.getElementById('xp-stat').title = t.xpTitle;
+
+      document.getElementById('learn-heading').innerText = t.learnHeading;
+      document.getElementById('chart-heading').innerText = t.chartHeading;
+      document.getElementById('consonants-heading').innerText = t.consonantsLabel;
+      document.getElementById('vowels-heading').innerText = t.vowelsLabel;
+      document.getElementById('words-heading').innerText = t.wordsLabel;
+      document.getElementById('quests-heading').innerText = t.questHeading;
+
+      document.getElementById('daily-icon').innerText = t.dailyIcon;
+      document.getElementById('daily-heading').innerText = t.dailyHeading;
+      document.getElementById('daily-desc').innerText = t.dailyDesc;
+      document.getElementById('daily-btn').innerText = t.dailyBtn;
+
+      document.getElementById('nav-learn-label').innerText = t.nav.learn;
+      document.getElementById('nav-chart-label').innerText = t.nav.chart;
+      document.getElementById('nav-quests-label').innerText = t.nav.quests;
+      document.getElementById('nav-daily-label').innerText = t.nav.daily;
+
+      document.getElementById('audio-btn').innerText = t.listenBtn;
+      document.getElementById('quiz-submit-btn').innerText = t.confirmBtn;
+    }
+
     /* Tab Switching */
     function switchView(viewId) {
       document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-      
+
       document.getElementById(`view-${viewId}`).classList.add('active');
       event.currentTarget.classList.add('active');
     }
 
     /* Render Level Tree */
     function renderPathTree() {
+      const t = T();
       const container = document.getElementById('path-tree');
       container.innerHTML = '';
 
-      levelsData.forEach((lvl) => {
-        const isUnlocked = state.completedLevels.includes(lvl.id) || lvl.id === Math.max(...state.completedLevels) + 1;
-        const isCompleted = state.completedLevels.includes(lvl.id);
+      t.levels.forEach((lvl, idx) => {
+        const id = idx + 1;
+        const isUnlocked = state.completedLevels.includes(id) || id === Math.max(...state.completedLevels) + 1;
+        const isCompleted = state.completedLevels.includes(id);
 
         const node = document.createElement('div');
         node.style.display = 'flex';
@@ -389,9 +634,9 @@
         node.style.alignItems = 'center';
 
         node.innerHTML = `
-          <div class="node-card ${isCompleted ? 'completed' : ''} ${!isUnlocked ? 'locked' : ''}" 
-               onclick="${isUnlocked ? `startQuiz(${lvl.id})` : ''}">
-            ${lvl.id}
+          <div class="node-card ${isCompleted ? 'completed' : ''} ${!isUnlocked ? 'locked' : ''}"
+               onclick="${isUnlocked ? `startQuiz(${id})` : ''}">
+            ${id}
           </div>
           <div class="node-label">${lvl.title}<br><small style="color:var(--gray-text); font-weight:normal;">${lvl.desc}</small></div>
         `;
@@ -401,6 +646,7 @@
 
     /* Render Alphabet Chart */
     function renderChart() {
+      const t = T();
       const createCards = (data, containerId) => {
         const el = document.getElementById(containerId);
         el.innerHTML = '';
@@ -415,19 +661,20 @@
 
       createCards(consonants, 'chart-consonants');
       createCards(vowels, 'chart-vowels');
-      createCards(words, 'chart-words');
+      createCards(t.words, 'chart-words');
     }
 
     /* Render Daily Quests */
     function renderQuests() {
+      const t = T();
       const container = document.getElementById('quest-list');
       const qProgress = Math.min(state.dailyProgress, 3);
-      
+
       container.innerHTML = `
         <div class="quest-item">
           <div class="quest-icon">⚡</div>
           <div class="quest-info">
-            <div class="quest-title">오늘 레벨 3개 완료하기</div>
+            <div class="quest-title">${t.quest1}</div>
             <div class="progress-bar"><div class="progress-fill" style="width: ${(qProgress/3)*100}%;"></div></div>
           </div>
           <div>${qProgress}/3</div>
@@ -435,15 +682,15 @@
         <div class="quest-item">
           <div class="quest-icon">🎯</div>
           <div class="quest-info">
-            <div class="quest-title">일일 테스트 참가하기</div>
+            <div class="quest-title">${t.quest2}</div>
             <div class="progress-bar"><div class="progress-fill" style="width: ${state.dailyProgress > 0 ? 100 : 0}%;"></div></div>
           </div>
-          <div>${state.dailyProgress > 0 ? '완료' : '미완료'}</div>
+          <div>${state.dailyProgress > 0 ? t.done : t.notDone}</div>
         </div>
       `;
     }
 
-    /* Text-to-Speech Functionality */
+    /* Text-to-Speech Functionality (항상 한국어 발음으로 재생) */
     function speakText(text) {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
@@ -457,14 +704,14 @@
     /* Start Quiz */
     function startQuiz(levelId) {
       isDailyTest = false;
-      currentQuizList = [...questionBank].sort(() => 0.5 - Math.random()).slice(0, 3);
+      currentQuizList = [...T().questions].sort(() => 0.5 - Math.random()).slice(0, 3);
       currentQuizIdx = 0;
       openQuizOverlay();
     }
 
     function startDailyTest() {
       isDailyTest = true;
-      currentQuizList = [...questionBank].sort(() => 0.5 - Math.random()).slice(0, 5);
+      currentQuizList = [...T().questions].sort(() => 0.5 - Math.random()).slice(0, 5);
       currentQuizIdx = 0;
       openQuizOverlay();
     }
@@ -481,7 +728,7 @@
     function loadCurrentQuestion() {
       selectedOption = null;
       const q = currentQuizList[currentQuizIdx];
-      
+
       document.getElementById('quiz-progress-fill').style.width = `${(currentQuizIdx / currentQuizList.length) * 100}%`;
       document.getElementById('quiz-question').innerText = q.q;
 
@@ -509,16 +756,17 @@
     }
 
     function submitAnswer() {
+      const t = T();
       if (selectedOption === null) {
-        alert("답안을 선택해 주세요!");
+        alert(t.selectFirst);
         return;
       }
 
       const q = currentQuizList[currentQuizIdx];
       if (selectedOption === q.a) {
-        alert("정답입니다! 🎉");
+        alert(t.correct);
       } else {
-        alert(`아쉽네요! 정답은 '${q.options[q.a]}' 입니다.`);
+        alert(t.wrong(q.options[q.a]));
       }
 
       currentQuizIdx++;
@@ -537,7 +785,7 @@
         renderPathTree();
         renderQuests();
 
-        alert(`🎊 축하합니다! 학습을 완료하여 +${gainedXP} XP를 획득했습니다!`);
+        alert(t.complete(gainedXP));
         closeQuiz();
       } else {
         loadCurrentQuestion();

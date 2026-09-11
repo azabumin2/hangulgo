@@ -1,14 +1,14 @@
 {
-  "name": "HangulGo - 한글 학습",
-  "short_name": "한글고",
-  "description": "듀오링고 스타일의 한글 학습 웹 앱. 레벨 트리, 문자표, 일일 퀘스트와 퀴즈로 한글을 배워보세요.",
+  "name": "HangulGo - Learn Hangul",
+  "short_name": "HangulGo",
+  "description": "A Duolingo-style Hangul learning web app for non-Korean speakers. Available in Korean, English, Japanese and Chinese. Level tree, alphabet chart, daily quests and quizzes.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f7f9fa",
   "theme_color": "#58cc02",
   "orientation": "portrait-primary",
-  "lang": "ko",
+  "lang": "en",
   "icons": [
     {
       "src": "icon.svg",
