@@ -432,12 +432,37 @@
         correct: '정답입니다! 🎉',
         wrong: (ans) => `아쉽네요! 정답은 '${ans}' 입니다.`,
         complete: (xp) => `🎊 축하합니다! 학습을 완료하여 +${xp} XP를 획득했습니다!`,
-        questions: [
-          { q: "소리 'g/k'에 해당하는 자음은?", options: ["ㄱ", "ㄴ", "ㄷ", "ㄹ"], a: 0, audio: "ㄱ" },
-          { q: "소리 'a'에 해당하는 모음은?", options: ["ㅓ", "ㅏ", "ㅗ", "ㅜ"], a: 1, audio: "ㅏ" },
-          { q: "다음 중 '나무'의 첫 글자는?", options: ["나", "가", "다", "라"], a: 0, audio: "나" },
-          { q: "'안녕하세요'의 올바른 뜻은?", options: ["감사합니다", "안녕하세요", "안녕히 가세요", "네"], a: 1, audio: "안녕하세요" },
-          { q: "'바다'를 읽는 올바른 발음은?", options: ["Bada", "Nabi", "Haneul", "Gabu"], a: 0, audio: "바다" }
+        levelQuestions: [
+          [
+            { q: "소리 'g/k'에 해당하는 자음은?", options: ["ㄱ", "ㄴ", "ㄷ", "ㄹ"], a: 0, audio: "ㄱ" },
+            { q: "소리 'n'에 해당하는 자음은?", options: ["ㄱ", "ㄴ", "ㄷ", "ㄹ"], a: 1, audio: "ㄴ" },
+            { q: "소리 'd/t'에 해당하는 자음은?", options: ["ㄱ", "ㄴ", "ㄷ", "ㄹ"], a: 2, audio: "ㄷ" },
+            { q: "소리 'r/l'에 해당하는 자음은?", options: ["ㄱ", "ㄴ", "ㄷ", "ㄹ"], a: 3, audio: "ㄹ" }
+          ],
+          [
+            { q: "소리 'a'에 해당하는 모음은?", options: ["ㅏ", "ㅓ", "ㅗ", "ㅜ"], a: 0, audio: "ㅏ" },
+            { q: "소리 'eo'에 해당하는 모음은?", options: ["ㅏ", "ㅓ", "ㅗ", "ㅜ"], a: 1, audio: "ㅓ" },
+            { q: "소리 'o'에 해당하는 모음은?", options: ["ㅏ", "ㅓ", "ㅗ", "ㅜ"], a: 2, audio: "ㅗ" },
+            { q: "소리 'u'에 해당하는 모음은?", options: ["ㅏ", "ㅓ", "ㅗ", "ㅜ"], a: 3, audio: "ㅜ" }
+          ],
+          [
+            { q: "'가'라고 읽는 글자는?", options: ["가", "나", "다", "라"], a: 0, audio: "가" },
+            { q: "'나'라고 읽는 글자는?", options: ["가", "나", "다", "라"], a: 1, audio: "나" },
+            { q: "'다'라고 읽는 글자는?", options: ["가", "나", "다", "라"], a: 2, audio: "다" },
+            { q: "'라'라고 읽는 글자는?", options: ["가", "나", "다", "라"], a: 3, audio: "라" }
+          ],
+          [
+            { q: "'나무'라고 쓰여진 단어는?", options: ["나무", "바다", "하늘", "나비"], a: 0, audio: "나무" },
+            { q: "'바다'라고 쓰여진 단어는?", options: ["나무", "바다", "하늘", "나비"], a: 1, audio: "바다" },
+            { q: "'하늘'이라고 쓰여진 단어는?", options: ["나무", "바다", "하늘", "나비"], a: 2, audio: "하늘" },
+            { q: "'나비'라고 쓰여진 단어는?", options: ["나무", "바다", "하늘", "나비"], a: 3, audio: "나비" }
+          ],
+          [
+            { q: "'안녕하세요'와 뜻이 같은 표현은?", options: ["감사합니다", "안녕하세요", "죄송합니다", "아니요"], a: 1, audio: "안녕하세요" },
+            { q: "'감사합니다'와 뜻이 같은 표현은?", options: ["감사합니다", "안녕하세요", "죄송합니다", "아니요"], a: 0, audio: "감사합니다" },
+            { q: "'죄송합니다'와 뜻이 같은 표현은?", options: ["감사합니다", "안녕하세요", "죄송합니다", "아니요"], a: 2, audio: "죄송합니다" },
+            { q: "'아니요'와 뜻이 같은 표현은?", options: ["감사합니다", "안녕하세요", "죄송합니다", "아니요"], a: 3, audio: "아니요" }
+          ]
         ],
         travelNavLabel: '회화', travelHeading: '여행 생존 회화',
         travelCats: [
@@ -523,12 +548,37 @@
         correct: 'Correct! 🎉',
         wrong: (ans) => `Not quite! The correct answer is '${ans}'.`,
         complete: (xp) => `🎊 Congratulations! You earned +${xp} XP!`,
-        questions: [
-          { q: "Which consonant makes the 'g/k' sound?", options: ["ㄱ", "ㄴ", "ㄷ", "ㄹ"], a: 0, audio: "ㄱ" },
-          { q: "Which vowel makes the 'a' sound?", options: ["ㅓ", "ㅏ", "ㅗ", "ㅜ"], a: 1, audio: "ㅏ" },
-          { q: "Which is the first letter of '나무' (Tree)?", options: ["나", "가", "다", "라"], a: 0, audio: "나" },
-          { q: "What does '안녕하세요' mean?", options: ["Thank you", "Hello", "Goodbye", "Yes"], a: 1, audio: "안녕하세요" },
-          { q: "How do you pronounce '바다' (Sea)?", options: ["Bada", "Nabi", "Haneul", "Gabu"], a: 0, audio: "바다" }
+        levelQuestions: [
+          [
+            { q: "Which consonant makes the 'g/k' sound?", options: ["ㄱ", "ㄴ", "ㄷ", "ㄹ"], a: 0, audio: "ㄱ" },
+            { q: "Which consonant makes the 'n' sound?", options: ["ㄱ", "ㄴ", "ㄷ", "ㄹ"], a: 1, audio: "ㄴ" },
+            { q: "Which consonant makes the 'd/t' sound?", options: ["ㄱ", "ㄴ", "ㄷ", "ㄹ"], a: 2, audio: "ㄷ" },
+            { q: "Which consonant makes the 'r/l' sound?", options: ["ㄱ", "ㄴ", "ㄷ", "ㄹ"], a: 3, audio: "ㄹ" }
+          ],
+          [
+            { q: "Which vowel makes the 'a' sound?", options: ["ㅏ", "ㅓ", "ㅗ", "ㅜ"], a: 0, audio: "ㅏ" },
+            { q: "Which vowel makes the 'eo' sound?", options: ["ㅏ", "ㅓ", "ㅗ", "ㅜ"], a: 1, audio: "ㅓ" },
+            { q: "Which vowel makes the 'o' sound?", options: ["ㅏ", "ㅓ", "ㅗ", "ㅜ"], a: 2, audio: "ㅗ" },
+            { q: "Which vowel makes the 'u' sound?", options: ["ㅏ", "ㅓ", "ㅗ", "ㅜ"], a: 3, audio: "ㅜ" }
+          ],
+          [
+            { q: "Which one is read \"ga\"?", options: ["가", "나", "다", "라"], a: 0, audio: "가" },
+            { q: "Which one is read \"na\"?", options: ["가", "나", "다", "라"], a: 1, audio: "나" },
+            { q: "Which one is read \"da\"?", options: ["가", "나", "다", "라"], a: 2, audio: "다" },
+            { q: "Which one is read \"ra\"?", options: ["가", "나", "다", "라"], a: 3, audio: "라" }
+          ],
+          [
+            { q: "What does '나무' mean?", options: ["Tree", "Sea", "Sky", "Butterfly"], a: 0, audio: "나무" },
+            { q: "What does '바다' mean?", options: ["Tree", "Sea", "Sky", "Butterfly"], a: 1, audio: "바다" },
+            { q: "What does '하늘' mean?", options: ["Tree", "Sea", "Sky", "Butterfly"], a: 2, audio: "하늘" },
+            { q: "What does '나비' mean?", options: ["Tree", "Sea", "Sky", "Butterfly"], a: 3, audio: "나비" }
+          ],
+          [
+            { q: "What does '안녕하세요' mean?", options: ["Thank you", "Hello", "Sorry", "No"], a: 1, audio: "안녕하세요" },
+            { q: "What does '감사합니다' mean?", options: ["Thank you", "Hello", "Sorry", "No"], a: 0, audio: "감사합니다" },
+            { q: "What does '죄송합니다' mean?", options: ["Thank you", "Hello", "Sorry", "No"], a: 2, audio: "죄송합니다" },
+            { q: "What does '아니요' mean?", options: ["Thank you", "Hello", "Sorry", "No"], a: 3, audio: "아니요" }
+          ]
         ],
         travelNavLabel: 'Phrases', travelHeading: 'Survival Korean for Travelers',
         travelCats: [
@@ -614,12 +664,37 @@
         correct: '正解です！🎉',
         wrong: (ans) => `残念！正解は '${ans}' です。`,
         complete: (xp) => `🎊 おめでとうございます！+${xp} XPを獲得しました！`,
-        questions: [
-          { q: "「g/k」の音に当たる子音は？", options: ["ㄱ", "ㄴ", "ㄷ", "ㄹ"], a: 0, audio: "ㄱ" },
-          { q: "「a」の音に当たる母音は？", options: ["ㅓ", "ㅏ", "ㅗ", "ㅜ"], a: 1, audio: "ㅏ" },
-          { q: "「나무」（木）の最初の文字はどれ？", options: ["나", "가", "다", "라"], a: 0, audio: "나" },
-          { q: "「안녕하세요」の正しい意味は？", options: ["ありがとう", "こんにちは", "さようなら", "はい"], a: 1, audio: "안녕하세요" },
-          { q: "「바다」（海）の正しい発音は？", options: ["Bada", "Nabi", "Haneul", "Gabu"], a: 0, audio: "바다" }
+        levelQuestions: [
+          [
+            { q: "「g/k」の音に当たる子音は？", options: ["ㄱ", "ㄴ", "ㄷ", "ㄹ"], a: 0, audio: "ㄱ" },
+            { q: "「n」の音に当たる子音は？", options: ["ㄱ", "ㄴ", "ㄷ", "ㄹ"], a: 1, audio: "ㄴ" },
+            { q: "「d/t」の音に当たる子音は？", options: ["ㄱ", "ㄴ", "ㄷ", "ㄹ"], a: 2, audio: "ㄷ" },
+            { q: "「r/l」の音に当たる子音は？", options: ["ㄱ", "ㄴ", "ㄷ", "ㄹ"], a: 3, audio: "ㄹ" }
+          ],
+          [
+            { q: "「a」の音に当たる母音は？", options: ["ㅏ", "ㅓ", "ㅗ", "ㅜ"], a: 0, audio: "ㅏ" },
+            { q: "「eo」の音に当たる母音は？", options: ["ㅏ", "ㅓ", "ㅗ", "ㅜ"], a: 1, audio: "ㅓ" },
+            { q: "「o」の音に当たる母音は？", options: ["ㅏ", "ㅓ", "ㅗ", "ㅜ"], a: 2, audio: "ㅗ" },
+            { q: "「u」の音に当たる母音は？", options: ["ㅏ", "ㅓ", "ㅗ", "ㅜ"], a: 3, audio: "ㅜ" }
+          ],
+          [
+            { q: "「가」と読む文字はどれ？", options: ["가", "나", "다", "라"], a: 0, audio: "가" },
+            { q: "「나」と読む文字はどれ？", options: ["가", "나", "다", "라"], a: 1, audio: "나" },
+            { q: "「다」と読む文字はどれ？", options: ["가", "나", "다", "라"], a: 2, audio: "다" },
+            { q: "「라」と読む文字はどれ？", options: ["가", "나", "다", "라"], a: 3, audio: "라" }
+          ],
+          [
+            { q: "「나무」の意味は？", options: ["木", "海", "空", "蝶"], a: 0, audio: "나무" },
+            { q: "「바다」の意味は？", options: ["木", "海", "空", "蝶"], a: 1, audio: "바다" },
+            { q: "「하늘」の意味は？", options: ["木", "海", "空", "蝶"], a: 2, audio: "하늘" },
+            { q: "「나비」の意味は？", options: ["木", "海", "空", "蝶"], a: 3, audio: "나비" }
+          ],
+          [
+            { q: "「안녕하세요」の意味は？", options: ["ありがとう", "こんにちは", "ごめんなさい", "いいえ"], a: 1, audio: "안녕하세요" },
+            { q: "「감사합니다」の意味は？", options: ["ありがとう", "こんにちは", "ごめんなさい", "いいえ"], a: 0, audio: "감사합니다" },
+            { q: "「죄송합니다」の意味は？", options: ["ありがとう", "こんにちは", "ごめんなさい", "いいえ"], a: 2, audio: "죄송합니다" },
+            { q: "「아니요」の意味は？", options: ["ありがとう", "こんにちは", "ごめんなさい", "いいえ"], a: 3, audio: "아니요" }
+          ]
         ],
         travelNavLabel: '会話', travelHeading: '旅行サバイバル会話',
         travelCats: [
@@ -705,12 +780,37 @@
         correct: '回答正确！🎉',
         wrong: (ans) => `很遗憾！正确答案是 '${ans}'。`,
         complete: (xp) => `🎊 恭喜！获得了 +${xp} XP！`,
-        questions: [
-          { q: "哪个辅音对应 'g/k' 的发音？", options: ["ㄱ", "ㄴ", "ㄷ", "ㄹ"], a: 0, audio: "ㄱ" },
-          { q: "哪个元音对应 'a' 的发音？", options: ["ㅓ", "ㅏ", "ㅗ", "ㅜ"], a: 1, audio: "ㅏ" },
-          { q: "'나무'（树）的第一个字母是？", options: ["나", "가", "다", "라"], a: 0, audio: "나" },
-          { q: "'안녕하세요' 的正确意思是？", options: ["谢谢", "你好", "再见", "是"], a: 1, audio: "안녕하세요" },
-          { q: "'바다'（海）的正确发音是？", options: ["Bada", "Nabi", "Haneul", "Gabu"], a: 0, audio: "바다" }
+        levelQuestions: [
+          [
+            { q: "哪个辅音对应 'g/k' 的发音？", options: ["ㄱ", "ㄴ", "ㄷ", "ㄹ"], a: 0, audio: "ㄱ" },
+            { q: "哪个辅音对应 'n' 的发音？", options: ["ㄱ", "ㄴ", "ㄷ", "ㄹ"], a: 1, audio: "ㄴ" },
+            { q: "哪个辅音对应 'd/t' 的发音？", options: ["ㄱ", "ㄴ", "ㄷ", "ㄹ"], a: 2, audio: "ㄷ" },
+            { q: "哪个辅音对应 'r/l' 的发音？", options: ["ㄱ", "ㄴ", "ㄷ", "ㄹ"], a: 3, audio: "ㄹ" }
+          ],
+          [
+            { q: "哪个元音对应 'a' 的发音？", options: ["ㅏ", "ㅓ", "ㅗ", "ㅜ"], a: 0, audio: "ㅏ" },
+            { q: "哪个元音对应 'eo' 的发音？", options: ["ㅏ", "ㅓ", "ㅗ", "ㅜ"], a: 1, audio: "ㅓ" },
+            { q: "哪个元音对应 'o' 的发音？", options: ["ㅏ", "ㅓ", "ㅗ", "ㅜ"], a: 2, audio: "ㅗ" },
+            { q: "哪个元音对应 'u' 的发音？", options: ["ㅏ", "ㅓ", "ㅗ", "ㅜ"], a: 3, audio: "ㅜ" }
+          ],
+          [
+            { q: "哪个是读作 \"ga\" 的字？", options: ["가", "나", "다", "라"], a: 0, audio: "가" },
+            { q: "哪个是读作 \"na\" 的字？", options: ["가", "나", "다", "라"], a: 1, audio: "나" },
+            { q: "哪个是读作 \"da\" 的字？", options: ["가", "나", "다", "라"], a: 2, audio: "다" },
+            { q: "哪个是读作 \"ra\" 的字？", options: ["가", "나", "다", "라"], a: 3, audio: "라" }
+          ],
+          [
+            { q: "'나무' 是什么意思？", options: ["树", "海", "天空", "蝴蝶"], a: 0, audio: "나무" },
+            { q: "'바다' 是什么意思？", options: ["树", "海", "天空", "蝴蝶"], a: 1, audio: "바다" },
+            { q: "'하늘' 是什么意思？", options: ["树", "海", "天空", "蝴蝶"], a: 2, audio: "하늘" },
+            { q: "'나비' 是什么意思？", options: ["树", "海", "天空", "蝴蝶"], a: 3, audio: "나비" }
+          ],
+          [
+            { q: "'안녕하세요' 是什么意思？", options: ["谢谢", "你好", "对不起", "不是"], a: 1, audio: "안녕하세요" },
+            { q: "'감사합니다' 是什么意思？", options: ["谢谢", "你好", "对不起", "不是"], a: 0, audio: "감사합니다" },
+            { q: "'죄송합니다' 是什么意思？", options: ["谢谢", "你好", "对不起", "不是"], a: 2, audio: "죄송합니다" },
+            { q: "'아니요' 是什么意思？", options: ["谢谢", "你好", "对不起", "不是"], a: 3, audio: "아니요" }
+          ]
         ],
         travelNavLabel: '会话', travelHeading: '旅行生存韩语',
         travelCats: [
@@ -768,6 +868,14 @@
         ]
       }
     };
+
+    /* 레벨별 문제(levelQuestions)를 합쳐 일일테스트용 전체 문제은행(questions)을 자동 생성 */
+    Object.keys(translations).forEach((lang) => {
+      const t = translations[lang];
+      if (t.levelQuestions) {
+        t.questions = [].concat(...t.levelQuestions);
+      }
+    });
 
     function detectDefaultLang() {
       const saved = localStorage.getItem('hg_lang');
@@ -1019,7 +1127,9 @@
     function startQuiz(levelId) {
       isDailyTest = false;
       currentLevelId = levelId;
-      currentQuizList = [...T().questions].sort(() => 0.5 - Math.random()).slice(0, 3);
+      const t = T();
+      const pool = (t.levelQuestions && t.levelQuestions[levelId - 1]) ? t.levelQuestions[levelId - 1] : t.questions;
+      currentQuizList = [...pool].sort(() => 0.5 - Math.random()).slice(0, 3);
       currentQuizIdx = 0;
       openQuizOverlay();
     }
