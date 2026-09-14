@@ -796,6 +796,7 @@
     let currentQuizIdx = 0;
     let selectedOption = null;
     let isDailyTest = false;
+    let currentLevelId = null;
 
     /* Initialize App */
     function init() {
@@ -1017,6 +1018,7 @@
     /* Start Quiz */
     function startQuiz(levelId) {
       isDailyTest = false;
+      currentLevelId = levelId;
       currentQuizList = [...T().questions].sort(() => 0.5 - Math.random()).slice(0, 3);
       currentQuizIdx = 0;
       openQuizOverlay();
@@ -1090,8 +1092,8 @@
         state.xp += gainedXP;
         state.dailyProgress += 1;
 
-        if (!isDailyTest && !state.completedLevels.includes(1)) {
-          state.completedLevels.push(1);
+        if (!isDailyTest && currentLevelId !== null && !state.completedLevels.includes(currentLevelId)) {
+          state.completedLevels.push(currentLevelId);
         }
 
         updateUIHeader();
